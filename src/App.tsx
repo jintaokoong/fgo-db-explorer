@@ -4,13 +4,15 @@ import BottomNavigation from 'components/navigation/bottom-navigation'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import HomePage from 'pages/home'
 import AccountPage from 'pages/account'
-import { Mode, ThemeContext } from 'hooks/theme-context'
+import { Mode, ThemeContext } from 'contexts/theme-context'
 import Colors from 'constants/colors'
 
 const Outer = styled.div`
+  font-family: "Noto Sans",serif ;
   background-color: ${(props) => props.theme === 'dark' ? 
           Colors.background.darker : 
           Colors.background.light};
+  color: ${(props) => props.theme === 'dark' ? Colors.foreground.dark : Colors.foreground.light}
 `
 
 const Main = styled.div`

@@ -19,7 +19,6 @@ const SNavigationItem = styled.div`
 
 const Label = styled.div`
   font-size: 0.7rem;
-  font-family: "Droid Sans", serif;
 `
 
 interface Props {
