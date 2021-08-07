@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import BottomNavigation from 'components/navigation/bottom-navigation'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
@@ -6,6 +6,8 @@ import HomePage from 'pages/home'
 import AccountPage from 'pages/account'
 import { Mode, ThemeContext } from 'contexts/theme-context'
 import Colors from 'constants/colors'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import Header from 'components/header'
 
 const Outer = styled.div`
   font-family: "Noto Sans",serif ;
@@ -36,24 +38,39 @@ const Main = styled.div`
   min-height: 100vh;
 `;
 
+const client = new QueryClient();
 
 function App() {
   const [mode, setMode] = useState<Mode>('dark');
 
+  useEffect(() => {
+    const m = localStorage.getItem('theme');
+    if (m && ['dark', 'light'].includes(m)) {
+      setMode(m as Mode);
+    }
+  }, [])
+
+  const setTheme = useCallback((mode: Mode) => {
+    setMode(mode);
+    localStorage.setItem('theme', mode);
+  }, [setMode]);
+
   return (
-    <ThemeContext.Provider value={{ mode, setMode }}>
-      <Outer theme={mode}>
-        <Main className={'App'} theme={mode}>
-          <BrowserRouter>
-            <Switch>
-              <Route exact path={'/'} component={HomePage} />
-              <Route exact path={'/account'} component={AccountPage} />
-            </Switch>
-            <BottomNavigation />
-          </BrowserRouter>
-        </Main>
-      </Outer>
-    </ThemeContext.Provider>
+    <QueryClientProvider client={client}>
+      <ThemeContext.Provider value={{ mode, setMode: setTheme }}>
+        <Outer theme={mode}>
+          <Main className={'App'} theme={mode}>
+            <BrowserRouter>
+              <Switch>
+                <Route exact path={'/'} component={HomePage} />
+                <Route exact path={'/account'} component={AccountPage} />
+              </Switch>
+              <BottomNavigation />
+            </BrowserRouter>
+          </Main>
+        </Outer>
+      </ThemeContext.Provider>
+    </QueryClientProvider>
   );
 }
 

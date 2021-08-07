@@ -1,5 +1,11 @@
 import styled from 'styled-components'
-import { HTMLAttributes, ReactNode, useCallback, useMemo } from 'react'
+import {
+  HTMLAttributes,
+  ReactNode,
+  SyntheticEvent,
+  useCallback,
+  useMemo,
+} from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import Colors from 'constants/colors'
 
@@ -32,7 +38,8 @@ const NavigationItem = (props: Props) => {
   const history = useHistory()
   const location = useLocation()
 
-  const onClick = useCallback(() => {
+  const onClick = useCallback((e: SyntheticEvent) => {
+    e.stopPropagation();
     history.replace(route ?? '/')
   }, [history, route])
 

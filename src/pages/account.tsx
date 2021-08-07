@@ -1,7 +1,8 @@
+import { Fragment } from 'react'
+
 const AccountPage = () => {
-  return <div>
-    Account
-  </div>
+  return <Fragment>
+  </Fragment>
 }
 
 export default AccountPage;
