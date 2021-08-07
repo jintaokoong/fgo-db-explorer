@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 
-const Main = styled.main`
+const Main = styled.div`
   border-left: 0;
   border-right: 0;
   
