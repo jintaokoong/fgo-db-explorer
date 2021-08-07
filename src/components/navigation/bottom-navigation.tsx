@@ -18,7 +18,7 @@ const SBottomNavigation = styled.footer`
   border-top: 1px solid rgba(0, 0, 0, 0.25);
   z-index: 100;
   
-  background-color: ${props => props.theme === 'dark' ? Colors.background.dark : Colors.background.light};
+  background-color: ${props => props.theme === 'dark' ? Colors.background.darker : Colors.background.light};
 `
 
 const BottomNavigation = () => {

@@ -5,8 +5,9 @@ const Colors = {
     dark: '#ffffff',
   },
   background: {
-    darker: '#18191a',
-    dark: '#242526',
+    darkest: '#18191a',
+    darker: '#242526',
+    dark: '#3a3b3c',
     light: '#ffffff',
   },
 }

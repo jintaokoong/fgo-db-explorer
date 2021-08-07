@@ -7,12 +7,11 @@ import AccountPage from 'pages/account'
 import { Mode, ThemeContext } from 'contexts/theme-context'
 import Colors from 'constants/colors'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import Header from 'components/header'
 
 const Outer = styled.div`
   font-family: "Noto Sans",serif ;
   background-color: ${(props) => props.theme === 'dark' ? 
-          Colors.background.darker : 
+          Colors.background.darkest : 
           Colors.background.light};
   color: ${(props) => props.theme === 'dark' ? Colors.foreground.dark : Colors.foreground.light}
 `
@@ -22,7 +21,7 @@ const Main = styled.div`
   border-right: 0;
 
   background-color: ${(props) => props.theme === 'dark' ? 
-          Colors.background.dark : 
+          Colors.background.darker : 
           Colors.background.light};
   
   @media (min-width: 770px) {
