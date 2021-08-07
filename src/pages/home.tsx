@@ -1,4 +1,4 @@
-import { Fragment, useContext, useMemo } from 'react'
+import { Fragment, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Layout from 'constants/layout'
 import useServants from 'hooks/use-servants'
@@ -43,14 +43,22 @@ const SearchBar = styled.input`
 const HomePage = () => {
   const { data, isLoading } = useServants();
   const { mode } = useContext(ThemeContext);
-  const servants = useMemo(() => data ?? [], [data]);
+  const [query, setQuery] = useState('');
+  const servants = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return query.length === 0 ? data : data.filter(
+      (s) => s.name.includes(query))
+  }, [data, query]);
 
   return <Fragment>
     <Header title={'Home'} />
     <Loader active={isLoading} />
     <Body>
       <SearchContainer>
-        <SearchBar theme={mode} />
+        <SearchBar theme={mode} value={query} onChange={(e) => setQuery(e.target.value)} />
       </SearchContainer>
       {
         servants.map((s) => (
