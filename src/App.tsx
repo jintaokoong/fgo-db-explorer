@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import BottomNavigation from 'components/navigation/bottom-navigation'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import HomePage from 'pages/home'
+import ServantsPage from 'pages/servants'
 import AccountPage from 'pages/account'
 import { Mode, ThemeContext } from 'contexts/theme-context'
 import Colors from 'constants/colors'
@@ -61,7 +61,7 @@ function App() {
           <Main className={'App'} theme={mode}>
             <BrowserRouter>
               <Switch>
-                <Route exact path={'/'} component={HomePage} />
+                <Route exact path={'/'} component={ServantsPage} />
                 <Route exact path={'/account'} component={AccountPage} />
               </Switch>
               <BottomNavigation />

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import NavigationItem from 'components/navigation/navigation-item'
-import { IoHome, IoPerson, } from 'react-icons/io5';
+import { IoPeople, IoPerson } from 'react-icons/io5'
 import Routes from 'constants/routes'
 import Colors from 'constants/colors'
 import { useContext } from 'react'
@@ -24,7 +24,7 @@ const SBottomNavigation = styled.footer`
 const BottomNavigation = () => {
   const { mode } = useContext(ThemeContext);
   return <SBottomNavigation theme={mode}>
-    <NavigationItem label={'Home'} route={Routes.home} icon={<IoHome size={'1.1rem'} />} />
+    <NavigationItem label={'Servants'} route={Routes.servants} icon={<IoPeople size={'1.1rem'} />} />
     <NavigationItem label={'Account'} route={Routes.account} icon={<IoPerson size={'1.1rem'} />} />
   </SBottomNavigation>
 }

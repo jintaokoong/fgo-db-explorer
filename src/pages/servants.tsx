@@ -33,14 +33,14 @@ const SearchBar = styled.input`
           Colors.foreground.dark : Colors.foreground.light
   };
   font-size: 1.05rem;
-  
+  caret-color: ${Colors.primary};
   :focus {
     outline: none !important;
     border: 2px solid ${Colors.primary};
   }
 `
 
-const HomePage = () => {
+const ServantsPage = () => {
   const { data, isLoading } = useServants();
   const { mode } = useContext(ThemeContext);
   const [query, setQuery] = useState('');
@@ -54,11 +54,13 @@ const HomePage = () => {
   }, [data, query]);
 
   return <Fragment>
-    <Header title={'Home'} />
+    <Header title={'Servants'} />
     <Loader active={isLoading} />
     <Body>
       <SearchContainer>
-        <SearchBar theme={mode} value={query} onChange={(e) => setQuery(e.target.value)} />
+        <SearchBar theme={mode}
+                   value={query}
+                   onChange={(e) => setQuery(e.target.value)} />
       </SearchContainer>
       {
         servants.map((s) => (
@@ -69,4 +71,4 @@ const HomePage = () => {
   </Fragment>
 }
 
-export default HomePage;
+export default ServantsPage;

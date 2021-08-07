@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { IoSunny } from 'react-icons/all'
+import { IoMoon, IoSunny } from 'react-icons/all'
 import { useCallback, useContext } from 'react'
 import { ThemeContext } from 'contexts/theme-context'
 import Layout from 'constants/layout'
@@ -47,7 +47,7 @@ const Header = (props: Props) => {
     <SHeaderContent>
       <Title>{props.title}</Title>
       <Button onClick={onToggle}>
-        <IoSunny size={'1.4rem'}/>
+        {mode === 'dark' ? <IoSunny size={'1.4rem'}/> : <IoMoon size={'1.4rem'} />}
       </Button>
     </SHeaderContent>
   </SHeader>

@@ -1,11 +1,11 @@
-import { BasicServant } from 'interfaces/entities/basic-servant'
+import { Servant } from '@atlasacademy/api-connector';
 
 const QueryServants = () => {
   return fetch('https://api.atlasacademy.io/export/JP/basic_servant.json')
     .then((res) => {
       return res.json()
     })
-    .then((data: BasicServant[]) => data)
+    .then((data: Servant.ServantBasic[]) => data)
 }
 
 const AtlasApiService = {

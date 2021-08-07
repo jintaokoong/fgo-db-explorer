@@ -1,11 +1,11 @@
-import { BasicServant } from 'interfaces/entities/basic-servant'
+import { Servant } from '@atlasacademy/api-connector';
 import styled from 'styled-components'
 import { useContext } from 'react'
 import { ThemeContext } from 'contexts/theme-context'
 import Colors from 'constants/colors'
 
 interface Props {
-  servant: BasicServant;
+  servant: Servant.ServantBasic;
 }
 
 const Card = styled.div`
@@ -13,6 +13,7 @@ const Card = styled.div`
   flex-direction: row;
   
   height: 10vh;
+  min-height: 50px;
   
   border: 1px solid rgba(0, 0, 0, 0.25);
   box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
@@ -49,6 +50,7 @@ const ServantCard = (props: Props) => {
     </ImageContainer>
     <InfoContainer>
       <Name>{props.servant.name}</Name>
+      <div>{Array(props.servant.rarity).fill(0).map(() => '★')}</div>
     </InfoContainer>
   </Card>
 }
