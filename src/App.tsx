@@ -7,6 +7,8 @@ import AccountPage from 'pages/account'
 import { Mode, ThemeContext } from 'contexts/theme-context'
 import Colors from 'constants/colors'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ServantDetailsPage } from 'pages/servant'
+import Routes from 'constants/routes'
 
 const Outer = styled.div`
   font-family: "Noto Sans",serif ;
@@ -61,10 +63,10 @@ function App() {
           <Main className={'App'} theme={mode}>
             <BrowserRouter>
               <Switch>
-                <Route exact path={'/'} component={ServantsPage} />
-                <Route exact path={'/account'} component={AccountPage} />
+                <Route exact path={Routes.servants} component={ServantsPage} />
+                <Route exact path={`${Routes.servant}/:id`} component={ServantDetailsPage} />
+                <Route exact path={Routes.account} component={AccountPage} />
               </Switch>
-              <BottomNavigation />
             </BrowserRouter>
           </Main>
         </Outer>

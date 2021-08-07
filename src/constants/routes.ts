@@ -1,6 +1,6 @@
 const Routes = {
   servants: '/',
-  about: '/about',
+  servant: '/servant',
   account: '/account',
 }
 

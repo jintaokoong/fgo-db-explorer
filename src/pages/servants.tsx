@@ -1,20 +1,13 @@
 import { Fragment, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import Layout from 'constants/layout'
 import useServants from 'hooks/use-servants'
 import Loader from 'components/shared/loader'
 import Header from 'components/header'
 import ServantCard from 'components/cards/servant-card'
 import Colors from 'constants/colors'
 import { ThemeContext } from 'contexts/theme-context'
-
-const Body = styled.main`
-  position: absolute;
-  top: ${`calc(${Layout.header.height} + 1px)`};
-  height: ${Layout.body.height};
-  width: 100%;
-  overflow-y: auto;
-`
+import BottomNavigation from 'components/navigation/bottom-navigation'
+import { OffsetBody } from 'components/shared/offset-body'
 
 const SearchContainer = styled.div`
   display: flex;
@@ -56,7 +49,7 @@ const ServantsPage = () => {
   return <Fragment>
     <Header title={'Servants'} />
     <Loader active={isLoading} />
-    <Body>
+    <OffsetBody hasHeader hasFooter>
       <SearchContainer>
         <SearchBar theme={mode}
                    value={query}
@@ -67,7 +60,8 @@ const ServantsPage = () => {
           <ServantCard servant={s} key={s.id} />
         ))
       }
-    </Body>
+    </OffsetBody>
+    <BottomNavigation />
   </Fragment>
 }
 

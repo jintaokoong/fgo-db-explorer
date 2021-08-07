@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useContext } from 'react'
 import { ThemeContext } from 'contexts/theme-context'
 import Colors from 'constants/colors'
+import { useHistory } from 'react-router-dom'
 
 interface Props {
   servant: Servant.ServantBasic;
@@ -43,8 +44,9 @@ const Name = styled.div`
 
 const ServantCard = (props: Props) => {
   const { mode } = useContext(ThemeContext);
+  const history = useHistory();
 
-  return <Card theme={mode}>
+  return <Card theme={mode} onClick={() => history.push(`/servant/${props.servant.id}`)}>
     <ImageContainer>
       <Image alt={props.servant.name} src={props.servant.face} />
     </ImageContainer>
