@@ -1,7 +1,7 @@
 const Routes = {
   servants: '/',
   servant: '/servant',
-  account: '/account',
-}
+  favorites: '/favorites',
+};
 
 export default Routes;

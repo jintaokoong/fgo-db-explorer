@@ -21,6 +21,11 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
+const MatImage = styled.img`
+  margin-right: 5px;
+  vertical-align: middle;
+`;
+
 const InfoContainer = styled.div`
   margin: 15px;
 `;
@@ -47,6 +52,10 @@ const Input = styled.input`
     outline: none !important;
     border: 2px solid ${Colors.primary};
   }
+`;
+
+const Button = styled.button`
+  width: 100%;
 `;
 
 const INITIAL_SKILL_STATE = {
@@ -154,19 +163,21 @@ export const ServantDetailsPage = () => {
               <tr key={idx}>
                 {g.map((m) => (
                   <td key={m.item.id}>
-                    <img
+                    <MatImage
                       title={m.item.name}
                       alt={m.item.name}
                       height={30}
                       src={m.item.icon}
-                      style={{ verticalAlign: 'middle' }}
-                    />{' '}
+                    />
                     x {m.amount}
                   </td>
                 ))}
               </tr>
             ))}
           </table>
+        </InfoContainer>
+        <InfoContainer>
+          <Button>Save to Favourites</Button>
         </InfoContainer>
       </Body>
     </div>
