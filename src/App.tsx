@@ -9,7 +9,7 @@ import { ServantDetailsPage } from 'pages/servant';
 import Routes from 'constants/routes';
 import FavoritesPage from 'pages/favorites';
 
-const Outer = styled.div`
+const Body = styled.div`
   font-family: 'Noto Sans', 'Droid Sans', sans-serif;
   background-color: ${(props) =>
     props.theme === 'dark'
@@ -64,7 +64,7 @@ function App() {
   return (
     <QueryClientProvider client={client}>
       <ThemeContext.Provider value={{ mode, setMode: setTheme }}>
-        <Outer theme={mode}>
+        <Body theme={mode}>
           <Main className={'App'} theme={mode}>
             <BrowserRouter>
               <Switch>
@@ -82,7 +82,7 @@ function App() {
               </Switch>
             </BrowserRouter>
           </Main>
-        </Outer>
+        </Body>
       </ThemeContext.Provider>
     </QueryClientProvider>
   );

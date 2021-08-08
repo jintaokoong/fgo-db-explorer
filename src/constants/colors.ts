@@ -1,5 +1,6 @@
 const Colors = {
   primary: '#C02EEB',
+  primaryHover: '#9b24bd',
   foreground: {
     light: '#000000',
     dark: '#ffffff',
@@ -8,8 +9,10 @@ const Colors = {
     darkest: '#18191a',
     darker: '#242526',
     dark: '#3a3b3c',
+    darkHover: '#3f4242',
     light: '#ffffff',
+    lightHover: '#ececec',
   },
-}
+};
 
 export default Colors;

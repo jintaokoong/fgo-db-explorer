@@ -56,6 +56,20 @@ const Input = styled.input`
 
 const Button = styled.button`
   width: 100%;
+  padding: 9px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-radius: 5px;
+  background-color: ${Colors.primary};
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: bold;
+  :hover {
+    background-color: ${Colors.primaryHover};
+  }
+  :active {
+    background-color: ${Colors.primary};
+  }
 `;
 
 const INITIAL_SKILL_STATE = {
@@ -177,7 +191,7 @@ export const ServantDetailsPage = () => {
           </table>
         </InfoContainer>
         <InfoContainer>
-          <Button>Save to Favourites</Button>
+          <Button theme={mode}>Save to Favourites</Button>
         </InfoContainer>
       </Body>
     </div>
