@@ -7,7 +7,7 @@ import ServantCard from 'components/cards/servant-card'
 import Colors from 'constants/colors'
 import { ThemeContext } from 'contexts/theme-context'
 import BottomNavigation from 'components/navigation/bottom-navigation'
-import { OffsetBody } from 'components/shared/offset-body'
+import { Body } from 'components/shared/body'
 
 const SearchContainer = styled.div`
   display: flex;
@@ -49,7 +49,7 @@ const ServantsPage = () => {
   return <Fragment>
     <Header title={'Servants'} />
     <Loader active={isLoading} />
-    <OffsetBody hasHeader hasFooter>
+    <Body hasHeader hasFooter>
       <SearchContainer>
         <SearchBar theme={mode}
                    value={query}
@@ -60,7 +60,7 @@ const ServantsPage = () => {
           <ServantCard servant={s} key={s.id} />
         ))
       }
-    </OffsetBody>
+    </Body>
     <BottomNavigation />
   </Fragment>
 }

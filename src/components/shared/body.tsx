@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<HTMLElement>{
   hasFooter?: boolean;
 }
 
-export const OffsetBody = styled.main`
+export const Body = styled.main`
   position: absolute;
   top: ${`calc(${Layout.header.height} + 1px)`};
   height: ${(props: Props) => `calc(100vh - ${props.hasHeader ? '51px' : '0px'} - ${props.hasFooter ? '51px' : '0px'})`};

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { IoMdReturnLeft, IoMoon, IoSunny } from 'react-icons/all'
+import { GoChevronLeft, IoMoon, IoSunny } from 'react-icons/all'
 import { useCallback, useContext } from 'react'
 import { ThemeContext } from 'contexts/theme-context'
 import Layout from 'constants/layout'
@@ -51,7 +51,7 @@ const Header = (props: Props) => {
     <SHeaderContent>
       <Visible condition={props.allowReturn}>
         <Button onClick={() => history.goBack()}>
-          <IoMdReturnLeft size={'1.4rem'} />
+          <GoChevronLeft size={'1.4rem'} />
         </Button>
       </Visible>
       <Title>{props.title}</Title>

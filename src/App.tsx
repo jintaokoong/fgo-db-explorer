@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import BottomNavigation from 'components/navigation/bottom-navigation'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import ServantsPage from 'pages/servants'
 import AccountPage from 'pages/account'
