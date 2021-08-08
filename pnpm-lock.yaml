@@ -6,12 +6,15 @@ specifiers:
   '@testing-library/react': ^11.1.0
   '@testing-library/user-event': ^12.1.10
   '@types/jest': ^26.0.15
+  '@types/lodash': ^4.14.172
   '@types/node': ^12.0.0
   '@types/react': ^17.0.0
   '@types/react-dom': ^17.0.0
   '@types/react-router-dom': ^5.1.8
   '@types/styled-components': ^5.1.12
   babel-plugin-styled-components: ^1.13.2
+  lodash: ^4.17.21
+  prettier: ^2.3.2
   react: ^17.0.2
   react-dom: ^17.0.2
   react-icons: ^4.2.0
@@ -32,6 +35,8 @@ dependencies:
   '@types/node': 12.20.19
   '@types/react': 17.0.16
   '@types/react-dom': 17.0.9
+  lodash: 4.17.21
+  prettier: 2.3.2
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-icons: 4.2.0_react@17.0.2
@@ -44,6 +49,7 @@ dependencies:
   web-vitals: 1.1.2
 
 devDependencies:
+  '@types/lodash': 4.14.172
   '@types/react-router-dom': 5.1.8
   '@types/styled-components': 5.1.12
   babel-plugin-styled-components: 1.13.2_styled-components@5.3.0
@@ -2306,6 +2312,10 @@ packages:
   /@types/json-schema/7.0.9:
     resolution: {integrity: sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==}
     dev: false
+
+  /@types/lodash/4.14.172:
+    resolution: {integrity: sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==}
+    dev: true
 
   /@types/minimatch/3.0.5:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
@@ -9436,6 +9446,12 @@ packages:
   /prepend-http/1.0.4:
     resolution: {integrity: sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /prettier/2.3.2:
+    resolution: {integrity: sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: false
 
   /pretty-bytes/5.6.0:

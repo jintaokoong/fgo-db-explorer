@@ -1,82 +1,75 @@
-import useServant from 'hooks/use-servant'
-import Header from 'components/header'
-import { Body } from 'components/shared/body'
-import useIDParam from 'hooks/use-id-param'
-import styled from 'styled-components'
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { Item } from '@atlasacademy/api-connector'
-import { EntityLevelUpMaterialProgression } from '@atlasacademy/api-connector/dist/Schema/Entity'
-import Colors from 'constants/colors'
-import { ThemeContext } from 'contexts/theme-context'
+import useServant from 'hooks/use-servant';
+import Header from 'components/header';
+import { Body } from 'components/shared/body';
+import useIDParam from 'hooks/use-id-param';
+import styled from 'styled-components';
+import { ChangeEvent, useCallback, useContext, useMemo, useState } from 'react';
+import { EntityLevelUpMaterialProgression } from '@atlasacademy/api-connector/dist/Schema/Entity';
+import Colors from 'constants/colors';
+import { ThemeContext } from 'contexts/theme-context';
+import ArrayUtils from 'utils/array-utils';
+import Skeleton from 'react-loading-skeleton';
+import _ from 'lodash';
+import ItemAmountDto from 'interfaces/dtos/item-amount-dto';
 
 const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
-`
+`;
 const Image = styled.img`
   border-radius: 5px;
-`
+`;
 
 const InfoContainer = styled.div`
   margin: 15px;
-`
+`;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`
+`;
 
 const Input = styled.input`
   width: 20%;
   padding: 10px;
   border: 2px solid rgba(0, 0, 0, 0.25);
   border-radius: 5px;
-  background-color: ${(props) => props.theme === 'dark' ?
-  Colors.background.dark : Colors.background.light
-};
-
-  color: ${(props) => props.theme === 'dark' ?
-  Colors.foreground.dark : Colors.foreground.light
-};
+  background-color: ${(props) =>
+    props.theme === 'dark' ? Colors.background.dark : Colors.background.light};
+  color: ${(props) =>
+    props.theme === 'dark' ? Colors.foreground.dark : Colors.foreground.light};
   font-size: 1.05rem;
   caret-color: ${Colors.primary};
+
   :focus {
     outline: none !important;
     border: 2px solid ${Colors.primary};
   }
-`
+`;
 
 const INITIAL_SKILL_STATE = {
   first: '1',
   second: '1',
   third: '1',
-}
+};
 
 const cleanInput = (input: string) => {
   const parsed = input.length === 0 ? 1 : parseInt(input);
   return parsed >= 10 ? 9 : parsed;
-}
+};
 
-const getItems = (current: number, elupm: EntityLevelUpMaterialProgression) => {
-  const frequired = Array(10 - current).fill(0).map((_, idx) => elupm[current+idx]);
-  const items = frequired.flatMap((i) => i.items);
-  const ri = items.reduce<{item: Item.Item, amount: number}[]>((n, a) => {
-    const idx = n.findIndex(i => i.item.id === a.item.id);
-    if (idx >= 0) {
-      const e = n[idx];
-      const ni = {
-        amount: e.amount + a.amount,
-        item: a.item,
-      };
-      return [...n.filter((_, inner) => inner !== idx), ni];
-    } else {
-      return [...n, a];
-    }
-  }, []);
-  return ri;
-}
+const getItems = (
+  current: number,
+  material: EntityLevelUpMaterialProgression
+) => {
+  const preprocessedItems = Array(10 - current)
+    .fill(0)
+    .map((_, idx) => material[current + idx]);
+  const items = preprocessedItems.flatMap((i) => i.items);
+  return ArrayUtils.SumMaterials(items);
+};
 
 export const ServantDetailsPage = () => {
   const id = useIDParam();
@@ -84,48 +77,98 @@ export const ServantDetailsPage = () => {
   const [state, setState] = useState(INITIAL_SKILL_STATE);
   const { data } = useServant(id);
 
-  const setSkill = useCallback((skill: 'first' | 'second' | 'third', value: string) => {
-    setState((s) => ({
-      ...s,
-      [skill]: value,
-    }))
-  }, [setState])
+  const setSkill = useCallback(
+    (skill: 'first' | 'second' | 'third') =>
+      (e: ChangeEvent<HTMLInputElement>) => {
+        setState((s) => ({
+          ...s,
+          [skill]: e.target.value,
+        }));
+      },
+    [setState]
+  );
 
-  useEffect(() => {
-    if (data) {
-      const f = cleanInput(state.first);
-      const first = getItems(f, data.skillMaterials);
-      const s = cleanInput(state.second);
-      const second = getItems(s, data.skillMaterials);
-      const t = cleanInput(state.third);
-      const third = getItems(t, data.skillMaterials);
-      const total = [...first, ...second, ...third].reduce<{item: Item.Item, amount: number}[]>((n, a) => {
-        const idx = n.findIndex(i => i.item.id === a.item.id);
-        if (idx >= 0) {
-          const e = n[idx];
-          const ni = {
-            amount: e.amount + a.amount,
-            item: a.item,
-          };
-          return [...n.filter((_, inner) => inner !== idx), ni];
-        } else {
-          return [...n, a];
-        }
-      }, []);
-      console.log(total);
+  const materials: ItemAmountDto[] = useMemo(() => {
+    if (!data) {
+      return [];
     }
-  }, [state, data])
 
-  return <div>
-    <Header title={data?.name ?? ''} allowReturn />
-    <Body hasHeader>
-      <InfoContainer>
-        <InputContainer>
-          <Input theme={mode} type={'number'} min={1} max={9} value={state.first} onChange={(e) => setSkill('first', e.target.value)} />
-          <Input theme={mode} type={'number'} min={1} max={9} value={state.second} onChange={(e) => setSkill('second', e.target.value)} />
-          <Input theme={mode} type={'number'} min={1} max={9} value={state.third} onChange={(e) => setSkill('third', e.target.value)} />
-        </InputContainer>
-      </InfoContainer>
-    </Body>
-  </div>
-}
+    const f = cleanInput(state.first);
+    const first = getItems(f, data.skillMaterials);
+    const s = cleanInput(state.second);
+    const second = getItems(s, data.skillMaterials);
+    const t = cleanInput(state.third);
+    const third = getItems(t, data.skillMaterials);
+    const total = ArrayUtils.SumMaterials([...first, ...second, ...third]);
+    console.log(total);
+    return total;
+  }, [state, data]);
+
+  return (
+    <div>
+      <Header title={data?.name ?? ''} allowReturn />
+      <Body hasHeader>
+        <ImageContainer>
+          {!data?.extraAssets.charaGraph?.ascension![3] ? (
+            <Skeleton
+              style={{ width: 'calc(25vh / 1.4140625)', height: '25vh' }}
+            />
+          ) : (
+            <Image
+              style={{ height: '25vh' }}
+              src={data.extraAssets.charaGraph.ascension![3]}
+            />
+          )}
+        </ImageContainer>
+        <InfoContainer>
+          <InputContainer>
+            <Input
+              theme={mode}
+              type={'number'}
+              min={1}
+              max={9}
+              value={state.first}
+              onChange={setSkill('first')}
+            />
+            <Input
+              theme={mode}
+              type={'number'}
+              min={1}
+              max={9}
+              value={state.second}
+              onChange={setSkill('second')}
+            />
+            <Input
+              theme={mode}
+              type={'number'}
+              min={1}
+              max={9}
+              value={state.third}
+              onChange={setSkill('third')}
+            />
+          </InputContainer>
+        </InfoContainer>
+        <InfoContainer>
+          <table style={{ width: '100%' }}>
+            {_.chunk<ItemAmountDto>(materials, 4).map((g, idx) => (
+              <tr key={idx}>
+                {g.map((m) => (
+                  <td key={m.item.id}>
+                    <img
+                      title={m.item.name}
+                      alt={m.item.name}
+                      height={30}
+                      src={m.item.icon}
+                      style={{ verticalAlign: 'middle' }}
+                    />{' '}
+                    x {m.amount}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </table>
+        </InfoContainer>
+      </Body>
+    </div>
+  );
+};
