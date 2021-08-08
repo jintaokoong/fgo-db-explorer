@@ -1,6 +1,8 @@
 const Colors = {
   primary: '#C02EEB',
   primaryHover: '#9b24bd',
+  danger: '#d70000',
+  dangerHover: '#b00000',
   foreground: {
     light: '#000000',
     dark: '#ffffff',

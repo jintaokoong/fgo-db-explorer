@@ -3,15 +3,24 @@ import Header from 'components/header';
 import { Body } from 'components/shared/body';
 import useIDParam from 'hooks/use-id-param';
 import styled from 'styled-components';
-import { ChangeEvent, useCallback, useContext, useState } from 'react';
+import {
+  ChangeEvent,
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import Colors from 'constants/colors';
 import { ThemeContext } from 'contexts/theme-context';
 import Skeleton from 'react-loading-skeleton';
 import ItemAmountDto from 'interfaces/dtos/item-amount-dto';
 import MaterialsSection from 'components/sections/materials-section';
 import SkillInput from 'components/forms/skill-input';
-import { IoStar } from 'react-icons/io5';
+import { IoStar, IoSync, IoTrash } from 'react-icons/io5';
 import useRequiredMaterials from 'hooks/use-required-materials';
+import FavoriteServantDto from 'interfaces/dtos/favorite-servant-dto';
+import Visible from 'components/shared/visible';
 
 const ImageContainer = styled.div`
   display: flex;
@@ -53,6 +62,17 @@ const Button = styled.button`
   }
 `;
 
+const RemoveButton = styled(Button)`
+  margin-top: 10px;
+  background-color: ${Colors.danger};
+  :hover {
+    background-color: ${Colors.dangerHover};
+  }
+  :active {
+    background-color: ${Colors.danger};
+  }
+`;
+
 const INITIAL_SKILL_STATE = {
   first: '1',
   second: '1',
@@ -63,6 +83,7 @@ export const ServantDetailsPage = () => {
   const id = useIDParam();
   const { mode } = useContext(ThemeContext);
   const [state, setState] = useState(INITIAL_SKILL_STATE);
+  const [isFavorite, setIsFavorite] = useState(false);
   const { data } = useServant(id);
 
   const materials: ItemAmountDto[] = useRequiredMaterials(
@@ -80,6 +101,52 @@ export const ServantDetailsPage = () => {
       },
     [setState]
   );
+
+  useEffect(() => {
+    const s = localStorage.getItem('favorites');
+    const fav: FavoriteServantDto[] = s ? JSON.parse(s) : [];
+    const idx = fav.findIndex((s) => s.id === data?.id);
+    if (idx >= 0) {
+      setIsFavorite(true);
+      const s = fav[idx];
+      setState({
+        first: s.skills.first.toString(),
+        second: s.skills.second.toString(),
+        third: s.skills.third.toString(),
+      });
+    }
+  }, [data]);
+
+  const saveOnClick = useCallback(() => {
+    if (!data) {
+      return;
+    }
+    const s = localStorage.getItem('favorites');
+    const currentFavorites: FavoriteServantDto[] = s ? JSON.parse(s) : [];
+    const favorites = currentFavorites
+      .filter((v) => v.id !== data.id)
+      .sort((a, b) => (a.id < b.id ? -1 : 1));
+    const payload = {
+      id: data.id,
+      skills: {
+        ...state,
+      },
+    };
+    localStorage.setItem('favorites', JSON.stringify([...favorites, payload]));
+    setIsFavorite(true);
+  }, [data, state]);
+
+  const removeOnClick = useCallback(() => {
+    if (!data) {
+      return;
+    }
+
+    const s = localStorage.getItem('favorites');
+    const current: FavoriteServantDto[] = s ? JSON.parse(s) : [];
+    const favorites = current.filter((s) => s.id !== data.id);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    setIsFavorite(false);
+  }, [data]);
 
   return (
     <div>
@@ -108,10 +175,25 @@ export const ServantDetailsPage = () => {
           <MaterialsSection materials={materials} />
         </InfoContainer>
         <InfoContainer>
-          <Button theme={mode}>
-            <IoStar fontSize={'1rem'} style={{ marginRight: 5 }} /> Save to
-            Favourites
+          <Button theme={mode} onClick={saveOnClick}>
+            {isFavorite ? (
+              <Fragment>
+                <IoSync fontSize={'1rem'} style={{ marginRight: 5 }} /> Update
+                Favorite
+              </Fragment>
+            ) : (
+              <Fragment>
+                <IoStar fontSize={'1rem'} style={{ marginRight: 5 }} /> Save to
+                Favorites
+              </Fragment>
+            )}
           </Button>
+          <Visible condition={isFavorite}>
+            <RemoveButton onClick={removeOnClick}>
+              <IoTrash fontSize={'1rem'} style={{ marginRight: 5 }} />
+              Remove from Favorites
+            </RemoveButton>
+          </Visible>
         </InfoContainer>
       </Body>
     </div>
