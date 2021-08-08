@@ -3,14 +3,15 @@ import Header from 'components/header';
 import { Body } from 'components/shared/body';
 import useIDParam from 'hooks/use-id-param';
 import styled from 'styled-components';
-import { ChangeEvent, useCallback, useContext, useMemo, useState } from 'react';
-import { EntityLevelUpMaterialProgression } from '@atlasacademy/api-connector/dist/Schema/Entity';
+import { ChangeEvent, useCallback, useContext, useState } from 'react';
 import Colors from 'constants/colors';
 import { ThemeContext } from 'contexts/theme-context';
-import ArrayUtils from 'utils/array-utils';
 import Skeleton from 'react-loading-skeleton';
-import _ from 'lodash';
 import ItemAmountDto from 'interfaces/dtos/item-amount-dto';
+import MaterialsSection from 'components/sections/materials-section';
+import SkillInput from 'components/forms/skill-input';
+import { IoStar } from 'react-icons/io5';
+import useRequiredMaterials from 'hooks/use-required-materials';
 
 const ImageContainer = styled.div`
   display: flex;
@@ -19,11 +20,6 @@ const ImageContainer = styled.div`
 `;
 const Image = styled.img`
   border-radius: 5px;
-`;
-
-const MatImage = styled.img`
-  margin-right: 5px;
-  vertical-align: middle;
 `;
 
 const InfoContainer = styled.div`
@@ -36,25 +32,10 @@ const InputContainer = styled.div`
   justify-content: space-between;
 `;
 
-const Input = styled.input`
-  width: 20%;
-  padding: 10px;
-  border: 2px solid rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
-  background-color: ${(props) =>
-    props.theme === 'dark' ? Colors.background.dark : Colors.background.light};
-  color: ${(props) =>
-    props.theme === 'dark' ? Colors.foreground.dark : Colors.foreground.light};
-  font-size: 1.05rem;
-  caret-color: ${Colors.primary};
-
-  :focus {
-    outline: none !important;
-    border: 2px solid ${Colors.primary};
-  }
-`;
-
 const Button = styled.button`
+  display: inline-flex;
+  justify-content: center;
+
   width: 100%;
   padding: 9px;
   border: 2px solid rgba(0, 0, 0, 0);
@@ -78,27 +59,16 @@ const INITIAL_SKILL_STATE = {
   third: '1',
 };
 
-const cleanInput = (input: string) => {
-  const parsed = input.length === 0 ? 1 : parseInt(input);
-  return parsed >= 10 ? 9 : parsed;
-};
-
-const getItems = (
-  current: number,
-  material: EntityLevelUpMaterialProgression
-) => {
-  const preprocessedItems = Array(10 - current)
-    .fill(0)
-    .map((_, idx) => material[current + idx]);
-  const items = preprocessedItems.flatMap((i) => i.items);
-  return ArrayUtils.SumMaterials(items);
-};
-
 export const ServantDetailsPage = () => {
   const id = useIDParam();
   const { mode } = useContext(ThemeContext);
   const [state, setState] = useState(INITIAL_SKILL_STATE);
   const { data } = useServant(id);
+
+  const materials: ItemAmountDto[] = useRequiredMaterials(
+    state,
+    data?.skillMaterials
+  );
 
   const setSkill = useCallback(
     (skill: 'first' | 'second' | 'third') =>
@@ -110,22 +80,6 @@ export const ServantDetailsPage = () => {
       },
     [setState]
   );
-
-  const materials: ItemAmountDto[] = useMemo(() => {
-    if (!data) {
-      return [];
-    }
-
-    const f = cleanInput(state.first);
-    const first = getItems(f, data.skillMaterials);
-    const s = cleanInput(state.second);
-    const second = getItems(s, data.skillMaterials);
-    const t = cleanInput(state.third);
-    const third = getItems(t, data.skillMaterials);
-    const total = ArrayUtils.SumMaterials([...first, ...second, ...third]);
-    console.log(total);
-    return total;
-  }, [state, data]);
 
   return (
     <div>
@@ -145,53 +99,19 @@ export const ServantDetailsPage = () => {
         </ImageContainer>
         <InfoContainer>
           <InputContainer>
-            <Input
-              theme={mode}
-              type={'number'}
-              min={1}
-              max={9}
-              value={state.first}
-              onChange={setSkill('first')}
-            />
-            <Input
-              theme={mode}
-              type={'number'}
-              min={1}
-              max={9}
-              value={state.second}
-              onChange={setSkill('second')}
-            />
-            <Input
-              theme={mode}
-              type={'number'}
-              min={1}
-              max={9}
-              value={state.third}
-              onChange={setSkill('third')}
-            />
+            <SkillInput value={state.first} onChange={setSkill('first')} />
+            <SkillInput value={state.second} onChange={setSkill('second')} />
+            <SkillInput value={state.third} onChange={setSkill('third')} />
           </InputContainer>
         </InfoContainer>
         <InfoContainer>
-          <table style={{ width: '100%' }}>
-            {_.chunk<ItemAmountDto>(materials, 4).map((g, idx) => (
-              <tr key={idx}>
-                {g.map((m) => (
-                  <td key={m.item.id}>
-                    <MatImage
-                      title={m.item.name}
-                      alt={m.item.name}
-                      height={30}
-                      src={m.item.icon}
-                    />
-                    x {m.amount}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </table>
+          <MaterialsSection materials={materials} />
         </InfoContainer>
         <InfoContainer>
-          <Button theme={mode}>Save to Favourites</Button>
+          <Button theme={mode}>
+            <IoStar fontSize={'1rem'} style={{ marginRight: 5 }} /> Save to
+            Favourites
+          </Button>
         </InfoContainer>
       </Body>
     </div>
